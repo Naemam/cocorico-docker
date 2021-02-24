@@ -1,5 +1,4 @@
 > ### Colors legend:
-> <pre><mark>cocorico</mark> - replace the highlighted values after copy-pasting</pre>
 > ```diff
 > - ASSISTANCE NEEDED (thank you in advance, COCOLABS and www cocorico dev gurus!)
 > ```
