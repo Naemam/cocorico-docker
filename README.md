@@ -1,4 +1,3 @@
-> &nbsp;
 > ### Colors legend:
 > <pre><mark>cocorico</mark> - replace the highlighted values after copy-pasting</pre>
 > ```diff
@@ -7,7 +6,6 @@
 > ```diff
 > + HELPFUL ADDITIONS?!
 > ```
-> &nbsp;
 
 # How To Install and Setup Cocorico on Ubuntu 20.04 from the official [Cocorico docker image](https://hub.docker.com/r/cocolabs/cocorico/)
 
@@ -86,7 +84,8 @@ Now let's set it up!
 ## Step 2 — Setting up Cocorico (dev)
 First, let's take care base variables and environment:
 ```diff
-- Edit /etc/apache2/sites-available/000-default.conf and add something like this (what are the correct ServerName ServerAlias and DocumentRoot)?
+- Edit /etc/apache2/sites-available/000-default.conf ?
+- Add something like this (what are the correct ServerName ServerAlias and DocumentRoot)?:
 ```
 ```
 <VirtualHost *:8080>
