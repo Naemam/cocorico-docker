@@ -105,7 +105,9 @@ First, let's take care base variables and environment:
 ```
 
 ```diff
-- What to do after connecting to the container?
+- Steps after connecting to the container?
+
+docker exec -it --user cocorico your_cocorico sh
 
 - What are the urls to access admin and landing page?
 
