@@ -45,3 +45,6 @@ docker kill cocorico && docker rm cocorico
 ## License
 
 Cocorico-Docker is released under the [MIT license](https://github.com/Cocolabs-SAS/cocorico-docker/blob/master/LICENSE).
+
+
+# How To Install and Setup Cocorico on Ubuntu 20.04 from [cocorico-docker](https://github.com/Cocolabs-SAS/cocorico-docker)
