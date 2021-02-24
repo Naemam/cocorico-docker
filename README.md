@@ -1,3 +1,14 @@
+> &nbsp;
+> ### Colors legend:
+> <pre><mark>cocorico</mark> - replace the highlighted values after copy-pasting</pre>
+> ```diff
+> - ASSISTANCE NEEDED (thank you in advance, COCOLABS and www cocorico dev gurus!)
+> ```
+> ```diff
+> + HELPFUL ADDITIONS?!
+> ```
+> &nbsp;
+
 # How To Install and Setup Cocorico on Ubuntu 20.04 from the official [Cocorico docker image](https://hub.docker.com/r/cocolabs/cocorico/)
 
 ## Prerequisites
@@ -24,9 +35,7 @@ First, verify your docker installation:
 docker -v
 ```
 
-```diff
-+ By default, the docker command can only be run by the root user or by a user in the docker group, which is automatically created during Docker’s installation process. The rest of this how-to assumes you are running the docker command as a user in the docker group. If you choose not to, please prepend the commands with sudo
-```
+<sup>By default, the docker command can only be run by the root user or by a user in the docker group, which is automatically created during Docker’s installation process. The rest of this how-to assumes you are running the docker command as a user in the docker group. If you choose not to, please prepend the commands with sudo</sup>
 
 ```
 docker pull cocolabs/cocorico
@@ -52,7 +61,8 @@ docker run --name <mark>your_cocorico</mark> -ti -p 8080:8080 -p 3306:3306 -p 90
 </pre>
 
 ```diff
-- PORTS: Can the 4 port numbers be changed if necessary? Running the above with -p 80:80 as instructed in cocorico-docker documentation failed:
+- PORTS: Can the 4 port numbers be changed if necessary?
+- Running the above with -p 80:80 as instructed in cocorico-docker documentation failed:
 
 https://github.com/Cocolabs-SAS/cocorico-docker 
 
@@ -61,9 +71,9 @@ https://github.com/Cocolabs-SAS/cocorico-docker
 https://github.com/Cocolabs-SAS/cocorico-docker/issues/2
 ```
 
-A list of package operations should start. If it finishes with `cocorio is alive` - congratulations!
+A list of symfony operations should start. If it finishes with `cocorio is alive` - congratulations!
 
-The following dockerd commands come very handy if running into problems:
+The following docker commands come very handy if running into problems:
 
 ```
 docker stop $(docker ps -a -q)
@@ -73,10 +83,10 @@ docker system prune
 
 Now let's set it up!
 
-## Step 2 — Setting up Cocorico
+## Step 2 — Setting up Cocorico (dev)
 First, let's take care base variables and environment:
 ```diff
-- Apache Virtual Hosts configuration (how)? Edit /etc/apache2/sites-available/000-default.conf and add something like this (what are the correct ServerName ServerAlias and DocumentRoot)?
+- Edit /etc/apache2/sites-available/000-default.conf and add something like this (what are the correct ServerName ServerAlias and DocumentRoot)?
 ```
 ```
 <VirtualHost *:8080>
@@ -99,9 +109,11 @@ First, let's take care base variables and environment:
 ```diff
 - What to do after connecting to the container?
 
-- What would be the urls for admin and landing page?
+- What are the urls to access admin and landing page?
+
+- What are the admin credentials for first login?
 ```
-The output currently is, respectively:
+The outputs currently are, respectively:
 ```
 http://localhost/
 
@@ -129,17 +141,4 @@ http://localhost:27017/
 >>"It looks like you are trying to access MongoDB over HTTP on the native driver port."
 ```
 
-
-
-
-> &nbsp;
-> ### Colored sections legend:
-> &nbsp;
-> <pre><mark>cocorico</mark> - replace the highlighted values after copy-pasting</pre>
-> ```diff
-> - ASSISTANCE NEEDED (thank you in advance, COCOLABS and www cocorico dev gurus!)
-> ```
-> ```diff
-> + HELPFUL ADDITIONS?!
-> ```
-> &nbsp;
+## Step 3 — Deploying Cocorico (prod)
