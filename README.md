@@ -1,50 +1,145 @@
+# How To Install and Setup Cocorico on Ubuntu 20.04 from the official [Cocorico docker image](https://hub.docker.com/r/cocolabs/cocorico/)
 
-[![Cocorico](http://docs.cocorico.io/images/logo_cocorico.png)](https://github.com/Cocolabs-SAS/cocorico)
-[![Docker](https://www.docker.com/sites/default/files/horizontal.png)](https://www.docker.com/)
+## Prerequisites
+Ubuntu 20.04 with the following:
 
-# Cocorico-Docker
+* [Docker](https://www.digitalocean.com/community/tutorials/how-to-install-and-use-docker-on-ubuntu-20-04)
 
-[![Docker Stars](https://img.shields.io/docker/stars/cocolabs/cocorico.svg?style=flat-square)](https://hub.docker.com/r/cocolabs/cocorico/)
-[![Docker Pulls](https://img.shields.io/docker/pulls/cocolabs/cocorico.svg?style=flat-square)](https://hub.docker.com/r/cocolabs/cocorico/)
-[![Docker Automated build](https://img.shields.io/docker/automated/cocolabs/cocorico.svg?style=flat-square)](https://hub.docker.com/r/cocolabs/cocorico/)
-[![Docker Build Status](https://img.shields.io/docker/build/cocolabs/cocorico.svg?style=flat-square)](https://hub.docker.com/r/cocolabs/cocorico/)
-[![License](https://img.shields.io/github/license/Cocolabs-SAS/cocorico-docker.svg?style=flat-square)](https://github.com/Cocolabs-SAS/cocorico-docker/blob/master/LICENSE)
+* ```diff
+  + Apache2
 
-The official [Cocorico docker image](https://hub.docker.com/r/cocolabs/cocorico/) that give you the ability to run Cocorico out of the box.
+* ```diff 
+  + PORTS: Cocorico needs the following ports available to run:
+  
+  :8080 (for web interface)
+  :3306 (for mariadb/mysql)
+  :9001 (for Supervisor Status)
+  :27017 (for mongodb)
+  ```
 
-## Requirements
+## Step 1 — Installing Cocorico
+First, verify your docker installation:
 
-- Linux OS
-- [Docker](https://docs.docker.com/install/)
-- [Docker Documentation](https://docs.docker.com/)
-
-## Usage
-
-Start the container:
-
-``` bash
-docker run --name cocorico -ti -p 80:80 -p 3306:3306 -p 9001:9001 -p 27017:27017  -v `pwd`:/cocorico -v `pwd`/tmp/mysql:/var/lib/mysql -v `pwd`/tmp/mongo:/data/db -e HOST_UID=$UID cocolabs/cocorico
+```
+docker -v
 ```
 
-Once the symfony server is running, enjoy Cocorico: [http://localhost](http://localhost)
-
-Also you can control processes with Supervisor: [http://localhost:9001](http://localhost:9001)
-
-Connect to the container:
-
-``` bash
-docker exec -it --user cocorico cocorico sh
+```diff
++ By default, the docker command can only be run by the root user or by a user in the docker group, which is automatically created during Docker’s installation process. The rest of this how-to assumes you are running the docker command as a user in the docker group. If you choose not to, please prepend the commands with sudo
 ```
 
-Stop the container:
-
-``` bash
-docker kill cocorico && docker rm cocorico
+```
+docker pull cocolabs/cocorico
 ```
 
-## License
+To verify the image has been downloaded to your machine, type:
 
-Cocorico-Docker is released under the [MIT license](https://github.com/Cocolabs-SAS/cocorico-docker/blob/master/LICENSE).
+```
+docker images
+```
+
+In the directory where Cocorico will be installed (e.g. <code>/home/<mark>_username</mark>/<mark>_projects</mark></code>), create the directory for <code><mark>your_cocorico</mark></code> and change into it:
+
+<pre>
+mkdir <mark>your_cocorico</mark>
+cd <mark>your_cocorico</mark>
+</pre>
+
+Finally, install Cocorico:
+
+<pre>
+docker run --name <mark>your_cocorico</mark> -ti -p 8080:8080 -p 3306:3306 -p 9001:9001 -p 27017:27017  -v `pwd`:/cocorico -v `pwd`/tmp/mysql:/var/lib/mysql -v `pwd`/tmp/mongo:/data/db -e HOST_UID=$UID cocolabs/cocorico
+</pre>
+
+```diff
+- PORTS: Can the 4 port numbers be changed if necessary? Running the above with -p 80:80 as instructed in cocorico-docker documentation failed:
+
+https://github.com/Cocolabs-SAS/cocorico-docker 
+
+- Changing it to -p 8080:8080 as suggested here succeeded:
+
+https://github.com/Cocolabs-SAS/cocorico-docker/issues/2
+```
+
+A list of package operations should start. If it finishes with `cocorio is alive` - congratulations!
+
+The following dockerd commands come very handy if running into problems:
+
+```
+docker stop $(docker ps -a -q)
+docker rm $(docker ps -a -q)
+docker system prune
+```
+
+Now let's set it up!
+
+## Step 2 — Setting up Cocorico
+First, let's take care base variables and environment:
+```diff
+- Apache Virtual Hosts configuration (how)? Edit /etc/apache2/sites-available/000-default.conf and add something like this (what are the correct ServerName ServerAlias and DocumentRoot)?
+```
+```
+<VirtualHost *:8080>
+	ServerName your_cocorico
+    ServerAlias your_cocorico
+
+    #For multiple images uploads
+    LimitRequestBody 240000000
+
+    DocumentRoot /home/_username/_projects/your_cocorico/web
+    <Directory /home/_username/_projects/your_cocorico/web>
+    	#For performance and security reasons we should not use htaccess in prod
+        AllowOverride Indexes FileInfo AuthConfig
+        Order Allow,Deny
+        Allow from all
+    </Directory>
+</VirtualHost>
+```
+
+```diff
+- What to do after connecting to the container?
+
+- What would be the urls for admin and landing page?
+```
+The output currently is, respectively:
+```
+http://localhost/
+
+>>"Apache2 Ubuntu Default Page"
+```
+```
+http://localhost:8080/
+
+>>"This site can’t be reached
+ERR_SOCKET_NOT_CONNECTED"
+```
+```
+http://localhost:3306/
+
+>>"5.5.5-10.2.22-MariaDB-log  mysql_native_password Got packets out of order"
+```
+```
+http://localhost:9001/
+
+>>"Supervisor status"
+```
+```
+http://localhost:27017/
+
+>>"It looks like you are trying to access MongoDB over HTTP on the native driver port."
+```
 
 
-# How To Install and Setup Cocorico on Ubuntu 20.04 from [cocorico-docker](https://github.com/Cocolabs-SAS/cocorico-docker)
+
+
+> &nbsp;
+> ### Colored sections legend:
+> &nbsp;
+> <pre><mark>cocorico</mark> - replace the highlighted values after copy-pasting</pre>
+> ```diff
+> - ASSISTANCE NEEDED (thank you in advance, COCOLABS and www cocorico dev gurus!)
+> ```
+> ```diff
+> + HELPFUL ADDITIONS?!
+> ```
+> &nbsp;
